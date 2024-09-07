@@ -229,8 +229,6 @@ tr:nth-child(even) {
     }
 }
 
-
-
 /* Maintain existing styles for larger devices */
 @media only screen and (min-width: 769px) {
     .img {
