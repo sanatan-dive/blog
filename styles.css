@@ -177,12 +177,6 @@ main a {
 
 /* Small devices, phones */
 @media only screen and (min-width: 480px) {
-    .img {
-        width: 256px;
-        height: 256px;
-    }
-}
-@media only screen and (min-width: 480px) {
     #foxy {
         min-width: 40px;
         float: center;
@@ -226,4 +220,21 @@ th, td {
 
 tr:nth-child(even) {
     background: #504945; /* Gruvbox darker grey */
+}
+/* Small devices, phones */
+@media only screen and (max-width: 480px) {
+    .img {
+        width: 256px; /* Smaller image size for phones */
+        height: 256px;
+    }
+}
+
+
+
+/* Maintain existing styles for larger devices */
+@media only screen and (min-width: 769px) {
+    .img {
+        width: 512px;
+        height: 512px;
+    }
 }
