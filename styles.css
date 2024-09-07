@@ -177,6 +177,12 @@ main a {
 
 /* Small devices, phones */
 @media only screen and (min-width: 480px) {
+    .img {
+        width: 256px;
+        height: 256px;
+    }
+}
+@media only screen and (min-width: 480px) {
     #foxy {
         min-width: 40px;
         float: center;
