@@ -1,0 +1,238 @@
+/* Dark mode */
+body {
+    background-color: #282828; /* Gruvbox dark background */
+    color: #ebdbb2; /* Gruvbox light text */
+    max-width: 800px;
+    margin: auto;
+    padding: .2em;
+    line-height: 1.5em;
+}
+
+h1 {
+    line-height: 1.5em;
+}
+
+blockquote {
+    background: #3c3836; /* Gruvbox darker background */
+    border-left: 5px solid #665c54; /* Gruvbox grey */
+    padding: 3px 1em 3px;
+}
+
+a {
+    color: #83a598; /* Gruvbox aqua */
+    text-decoration: none;
+}
+
+a:hover {
+    color: #fabd2f; /* Gruvbox yellow */
+    text-decoration: underline;
+}
+
+header {
+    background: #3c3836; /* Gruvbox dark header */
+    border-bottom: 2px dotted #fabd2f; /* Gruvbox yellow */
+    position: relative;
+    width: 100%;
+    height: 1.75rem;
+    font-size: 1rem;
+}
+
+header a {
+    color: #fbf1c7; /* Gruvbox light text */
+    line-height: 1.75rem;
+    padding: 0 0.5rem;
+}
+
+header a:hover,
+ .current a {
+    color: #fabd2f; /* Gruvbox yellow */
+}
+
+header ul,
+header ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+header nav {
+    padding: 0 0.5rem;
+}
+
+/* Header and Footer */
+.menu li {
+    display: inline-block;
+}
+
+.article-meta, .menu a {
+    background: #3c3836; /* Gruvbox dark background */
+    color: #ebdbb2; /* Gruvbox light text */
+    text-decoration: none;
+    padding: 5px;
+    border-radius: 5px;
+    border-style: dotted;
+    border-width: 1px;
+    margin-bottom: 20px;
+}
+
+.terms {
+    font-size: .9em;
+}
+
+.menu, .article-meta, footer {
+    text-align: center;
+}
+
+.title {
+    font-size: 1.1em;
+}
+
+footer a {
+    color: #83a598; /* Gruvbox aqua */
+    text-decoration: none;
+}
+
+.navlist {
+    display: flex;
+    justify-content: space-between;
+}
+
+.navitem {
+    color: #fbf1c7; /* Gruvbox light text */
+}
+
+.pull-left {
+    float: left;
+}
+
+.pull-right {
+    float: right;
+}
+.img{
+    width: 512px;
+    height: 512px;
+}
+
+/* Code Boxes */
+pre {
+    background-color: #3c3836; /* Gruvbox darker background */
+    border: 2px solid #fabd2f; /* Gruvbox yellow */
+    padding: 1em;
+    overflow-x: auto;
+}
+
+pre code {
+    background: none;
+    color: #ebdbb2; /* Gruvbox light text */
+}
+
+/* Images, tables, misc. */
+img, iframe, video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+main {
+    background-color: #282828; /* Gruvbox dark background */
+    color: #ebdbb2; /* Gruvbox light text */
+    hyphens: auto;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.7em;
+    display: block;
+    font-size: 1.1em;
+}
+
+main a {
+    font-weight: bold;
+}
+
+.content-wrapper {
+    background-color: #282828; /* Gruvbox dark background */
+    color: #ebdbb2; /* Gruvbox light text */
+    padding: 0px 12px 0px 12px;
+}
+
+#foxy {
+    min-width: 40px;
+    float: right;
+    padding: 10px;
+    display: block;
+}
+
+/* Table of Contents */
+#TableOfContents, #TOC {
+    border: 1px solid #d5c4a1; /* Gruvbox light grey */
+    border-radius: 5px;
+}
+
+#table-of-contents {
+    background-color: #3c3836; /* Gruvbox darker background */
+    color: #ebdbb2; /* Gruvbox light text */
+}
+
+/* Small devices, phones */
+@media only screen and (min-width: 480px) {
+    #foxy {
+        min-width: 40px;
+        float: center;
+        padding: 10px 10px 10px 20px;
+        display: block;
+    }
+}
+
+/* Large screen specific styles */
+@media screen and (min-width: 768px) {
+    #table-of-contents {
+        position: fixed;
+        top: 50%;
+        right: 15px;
+        transform: translateY(-50%);
+        background-color: #3c3836; /* Gruvbox darker background */
+        color: #ebdbb2; /* Gruvbox light text */
+        padding: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        width: 250px;
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+}
+
+table {
+    margin: auto;
+    border-top: 1px solid #665c54; /* Gruvbox grey */
+    border-bottom: 1px solid #665c54; /* Gruvbox grey */
+}
+
+table thead th {
+    border-bottom: 1px solid #665c54; /* Gruvbox grey */
+    color: #ebdbb2; /* Gruvbox light text */
+}
+
+th, td {
+    padding: 5px;
+    color: #ebdbb2; /* Gruvbox light text */
+}
+
+tr:nth-child(even) {
+    background: #504945; /* Gruvbox darker grey */
+}
+/* Small devices, phones */
+@media only screen and (max-width: 480px) {
+    .img {
+        width: 256px; /* Smaller image size for phones */
+        height: 256px;
+    }
+}
+
+/* Maintain existing styles for larger devices */
+@media only screen and (min-width: 769px) {
+    .img {
+        width: 512px;
+        height: 512px;
+    }
+}
