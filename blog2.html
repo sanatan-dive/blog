@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="generator" content="Hugo 0.133.0">
+    <link rel="shortcut icon" type="x-icon" href="van.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/images/site.webmanifest">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A step-by-step guide for creating your first VS Code extension">
+    <title>Creating Your First VS Code Extension - blog1.dive</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="fonts.css">
+</head>
+<body>
+  
+    <nav>
+        <ul class="navlist" style="list-style: none; font-size: large; ">
+          
+          
+          <li class="pull-left">
+            <a class="navitem" href="index.html">~home</a>
+          </li>
+          
+          
+          <li class="pull-left ">
+            <a class="navitem" href="about.html">~aboutme</a>
+          </li>
+             
+          <li class="pull-right">
+            <a class="navitem" href="link.html">~links</a>
+          </li>
+          
+          <li class="pull-right">
+            <a class="navitem" href="edc.html">~edc</a>
+          </li>
+          
+          
+    
+    
+        </ul>
+      </nav>
+  
+  <hr>
+
+  <br>
+
+  <div class="article-meta">
+    <h1><span class="title">Creating Your First VS Code Extension</span></h1>
+    <p class="terms"></p>
+  </div>
+
+  <div class="content-wrapper">
+    <main>
+      <h1>Building Your First VS Code Extension</h1>
+      
+      <h2>A Step-by-Step Guide</h2>
+      <p>So you want to build your first VS Code extension? Awesome! Let's walk through this process together. I'll show you how to create a simple "Hello World" extension that displays a notification message when activated.</p>
+
+      <h2>What We'll Build</h2>
+      <p>We're going to create an extension that adds a command to VS Code. When you run the command, it'll show a friendly "Hello World" message. Simple, but it's the perfect starting point to understand how extensions work.</p>
+
+      <h2>Prerequisites</h2>
+      <p>Before we start, make sure you have:</p>
+      <ol>
+          <li>Node.js installed (version 14.x or higher)</li>
+          <li>Git installed</li>
+          <li>Visual Studio Code installed</li>
+      </ol>
+
+      <h2>Step 1: Install Yeoman and VS Code Extension Generator</h2>
+      <p>First, we need to install some tools that will scaffold our project. Open your terminal and run:</p>
+      <pre><code>npm install -g yo generator-code</code></pre>
+      <p>Yeoman (<code>yo</code>) is a scaffolding tool that creates project structures, and <code>generator-code</code> is a template specifically for VS Code extensions.</p>
+
+      <h2>Step 2: Generate Your Extension Project</h2>
+      <p>Now, let's create the extension scaffolding:</p>
+      <pre><code>yo code</code></pre>
+      <p>You'll be asked several questions to set up your project:</p>
+      <ul>
+          <li>Select "New Extension (TypeScript)"</li>
+          <li>Enter a name for your extension (e.g., "helloworld")</li>
+          <li>Enter an identifier (usually in format: publisher.extension-name)</li>
+          <li>Enter a description</li>
+          <li>Initialize a git repository? (recommended: Yes)</li>
+      </ul>
+
+      <h2>Step 3: Explore the Generated Project</h2>
+      <p>After the generator finishes, you'll have a folder structure like this:</p>
+      <pre><code>helloworld/
+├── .vscode/
+│   ├── launch.json     // Config for launching and debugging the extension
+│   └── tasks.json      // Config for build task
+├── node_modules/
+├── src/
+│   └── extension.ts    // Main extension code
+├── .gitignore
+├── package.json        // Extension manifest
+├── tsconfig.json       // TypeScript configuration
+└── README.md</code></pre>
+      <p>Let's look at the important files:</p>
+
+      <h3>package.json</h3>
+      <p>This is your extension's manifest file. It defines:</p>
+      <ul>
+          <li>Metadata (name, description, version)</li>
+          <li>Activation events (when your extension loads)</li>
+          <li>Contribution points (what your extension adds to VS Code)</li>
+      </ul>
+      <p>The default file looks something like this:</p>
+      <div class="code-block">
+<pre>{
+  "name": "helloworld",
+  "displayName": "HelloWorld",
+  "description": "My first extension",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "helloworld.helloWorld",
+        "title": "Hello World"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.60.0",
+    "@types/node": "14.x",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.0.0",
+    "typescript": "^4.3.5"
+  }
+}</pre>
+      </div>
+      <p>Notice the <code>contributes</code> section defines a command called <code>helloworld.helloWorld</code> with the title "Hello World".</p>
+
+      <h3>src/extension.ts</h3>
+      <p>This file contains the main code for your extension:</p>
+      <div class="code-block">
+<pre>// The module 'vscode' contains the VS Code extensibility API
+import * as vscode from 'vscode';
+
+// This method is called when your extension is activated
+export function activate(context: vscode.ExtensionContext) {
+    
+    // Register a command that can be invoked via Command Palette
+    let disposable = vscode.commands.registerCommand('helloworld.helloWorld', () => {
+        // Display a message box to the user
+        vscode.window.showInformationMessage('Hello World from HelloWorld!');
+    });
+    
+    // Add to a list of disposables which are disposed when this extension is deactivated
+    context.subscriptions.push(disposable);
+}
+
+// This method is called when your extension is deactivated
+export function deactivate() {}</pre>
+      </div>
+
+      <h2>Step 4: Understanding the Code</h2>
+      <p>Let's break down what's happening:</p>
+      <ol>
+          <li>We import the VS Code API as <code>vscode</code></li>
+          <li>When the extension activates, the <code>activate</code> function runs</li>
+          <li>Inside <code>activate</code>, we register a command called 'helloworld.helloWorld'</li>
+          <li>When that command runs, it shows a notification with our message</li>
+          <li>We add our command to the extension context's subscriptions for cleanup</li>
+      </ol>
+
+      <h2>Step 5: Run Your Extension</h2>
+      <p>To test your extension:</p>
+      <ul>
+          <li><strong>Install dependencies:</strong> Open the terminal in VS Code and run:
+              <pre><code>npm install prettier
+npm run compile</code></pre>
+          </li>
+          <li><strong>Start the extension:</strong> Press <code>F5</code> in VS Code.</li>
+          <li><strong>Open the development host:</strong> A new "Extension Development Host" window will appear.</li>
+          <li><strong>Access the Command Palette:</strong> In the new window, press <code>Ctrl+Shift+P</code> (or <code>Cmd+Shift+P</code> on Mac).</li>
+          <li><strong>Run your command:</strong> Type "Hello World" and select your extension's command.</li>
+          <li><strong>See the result:</strong> A message popup should appear with your notification!</li>
+      </ul>
+
+      <h2>Step 6: Making Changes</h2>
+      <p>Let's modify our extension to make it more interesting. Update the <code>extension.ts</code> file:</p>
+      <div class="code-block">
+<pre>import * as vscode from 'vscode';
+
+export function activate(context: vscode.ExtensionContext) {
+    // Register our first command
+    let helloCommand = vscode.commands.registerCommand('helloworld.helloWorld', () => {
+        // Get the active text editor
+        const editor = vscode.window.activeTextEditor;
+        
+        if (editor) {
+            // If we have an editor, get the document and its text
+            const document = editor.document;
+            const selection = editor.selection;
+            
+            // Get the selected text or the word at the cursor position
+            const word = document.getText(selection) || 
+                         document.getText(document.getWordRangeAtPosition(selection.active) || selection);
+            
+            // Show a personalized greeting if text is selected
+            if (word && word.trim().length > 0) {
+                vscode.window.showInformationMessage(`Hello, ${word}!`);
+            } else {
+                vscode.window.showInformationMessage('Hello, World!');
+            }
+        } else {
+            vscode.window.showInformationMessage('Hello, World!');
+        }
+    });
+    
+    // Register a second command that inserts text
+    let insertCommand = vscode.commands.registerCommand('helloworld.insertHello', () => {
+        const editor = vscode.window.activeTextEditor;
+        
+        if (editor) {
+            // Insert text at the current cursor position
+            editor.edit(editBuilder => {
+                editBuilder.insert(editor.selection.active, 'Hello, VS Code Extension World!');
+            });
+        }
+    });
+    
+    // Add both commands to subscriptions
+    context.subscriptions.push(helloCommand, insertCommand);
+}
+
+export function deactivate() {}</pre>
+      </div>
+      <p>Now we need to update our <code>package.json</code> to include the new command:</p>
+      <div class="code-block">
+<pre>"contributes": {
+  "commands": [
+    {
+      "command": "helloworld.helloWorld",
+      "title": "Hello World"
+    },
+    {
+      "command": "helloworld.insertHello",
+      "title": "Insert Hello Message"
+    }
+  ]
+}</pre>
+      </div>
+
+      <h2>Step 7: Adding a Keybinding</h2>
+      <p>Let's add a keyboard shortcut for our insert command. In <code>package.json</code>, add:</p>
+      <div class="code-block">
+<pre>"contributes": {
+  "commands": [...],
+  "keybindings": [
+    {
+      "command": "helloworld.insertHello",
+      "key": "ctrl+alt+h",
+      "mac": "cmd+alt+h",
+      "when": "editorTextFocus"
+    }
+  ]
+}</pre>
+      </div>
+
+      <h2>Step 8: Adding Extension Settings</h2>
+      <p>Let's make our greeting customizable through settings:</p>
+      <p>In <code>package.json</code>, add:</p>
+      <div class="code-block">
+<pre>"contributes": {
+  "commands": [...],
+  "keybindings": [...],
+  "configuration": {
+    "title": "Hello World",
+    "properties": {
+      "helloworld.greeting": {
+        "type": "string",
+        "default": "Hello",
+        "description": "The greeting to use"
+      }
+    }
+  }
+}</pre>
+      </div>
+      <p>Then update <code>extension.ts</code> to use this setting:</p>
+      <div class="code-block">
+<pre>// In the helloWorld command handler:
+const config = vscode.workspace.getConfiguration('helloworld');
+const greeting = config.get('greeting') || 'Hello';
+
+if (word && word.trim().length > 0) {
+    vscode.window.showInformationMessage(`${greeting}, ${word}!`);
+} else {
+    vscode.window.showInformationMessage(`${greeting}, World!`);
+}</pre>
+      </div>
+
+      <h2>Step 9: Package Your Extension</h2>
+      <p>Once you're happy with your extension, you can package it for distribution:</p>
+      <ol>
+          <li>Install the VSCE packaging tool:
+              <pre><code>npm install -g vsce</code></pre>
+          </li>
+          <li>Package your extension:
+              <pre><code>vsce package</code></pre>
+          </li>
+      </ol>
+      <p>This creates a <code>.vsix</code> file that can be installed in VS Code.</p>
+
+      <h2>Step 10: Installing Your Extension Manually</h2>
+      <p>To install your packaged extension:</p>
+      <ol>
+          <li>Open VS Code</li>
+          <li>Go to Extensions view (<code>Ctrl+Shift+X</code>)</li>
+          <li>Click the "..." at the top of the Extensions view</li>
+          <li>Select "Install from VSIX..."</li>
+          <li>Choose your <code>.vsix</code> file</li>
+      </ol>
+
+      <h2>Complete Project Example</h2>
+      <p>Here's a complete example of what your final files might look like:</p>
+
+      <h3>package.json</h3>
+      <div class="code-block">
+<pre>{
+  "name": "helloworld",
+  "displayName": "HelloWorld",
+  "description": "A friendly hello world extension",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "helloworld.helloWorld",
+        "title": "Say Hello"
+      },
+      {
+        "command": "helloworld.insertHello",
+        "title": "Insert Hello Message"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "helloworld.insertHello",
+        "key": "ctrl+alt+h",
+        "mac": "cmd+alt+h",
+        "when": "editorTextFocus"
+      }
+    ],
+    "configuration": {
+      "title": "Hello World",
+      "properties": {
+        "helloworld.greeting": {
+          "type": "string",
+          "default": "Hello",
+          "description": "The greeting to use"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.60.0",
+    "@types/glob": "^7.1.3",
+    "@types/mocha": "^8.2.2",
+    "@types/node": "14.x",
+    "eslint": "^7.27.0",
+    "glob": "^7.1.7",
+    "mocha": "^8.4.0",
+    "typescript": "^4.3.2",
+    "vscode-test": "^1.5.2"
+  }
+}</pre>
+      </div>
+
+      <h3>extension.ts</h3>
+      <div class="code-block">
+<pre>import * as vscode from 'vscode';
+
+export function activate(context: vscode.ExtensionContext) {
+    console.log('Congratulations, your extension "helloworld" is now active!');
+    
+    // Register our hello command
+    let helloCommand = vscode.commands.registerCommand('helloworld.helloWorld', () => {
+        // Get user settings
+        const config = vscode.workspace.getConfiguration('helloworld');
+        const greeting = config.get('greeting') || 'Hello';
+        
+        // Get the active text editor
+        const editor = vscode.window.activeTextEditor;
+        
+        if (editor) {
+            // Get selected text if any
+            const document = editor.document;
+            const selection = editor.selection;
+            
+            const word = document.getText(selection) || 
+                         document.getText(document.getWordRangeAtPosition(selection.active) || selection);
+            
+            if (word && word.trim().length > 0) {
+                vscode.window.showInformationMessage(`${greeting}, ${word}!`);
+            } else {
+                vscode.window.showInformationMessage(`${greeting}, World!`);
+            }
+        } else {
+            vscode.window.showInformationMessage(`${greeting}, World!`);
+        }
+    });
+    
+    // Register our insert command
+    let insertCommand = vscode.commands.registerCommand('helloworld.insertHello', () => {
+        // Get user settings
+        const config = vscode.workspace.getConfiguration('helloworld');
+        const greeting = config.get('greeting') || 'Hello';
+        
+        const editor = vscode.window.activeTextEditor;
+        
+        if (editor) {
+            // Insert text at current cursor position
+            editor.edit(editBuilder => {
+                editBuilder.insert(editor.selection.active, `${greeting}, VS Code Extension World!`);
+            });
+            
+            // Show a confirmation message
+            vscode.window.showInformationMessage('Text inserted successfully!');
+        } else {
+            vscode.window.showWarningMessage('No active editor found');
+        }
+    });
+    
+    // Add commands to the extension context
+    context.subscriptions.push(helloCommand, insertCommand);
+}
+
+export function deactivate() {
+    console.log('Your extension "helloworld" is now deactivated!');
+}</pre>
+      </div>
+
+      <h2>Going Further</h2>
+      <p>Once you're comfortable with the basics, you can explore more advanced features:</p>
+      <ul>
+          <li>Creating a status bar item</li>
+          <li>Adding a view container and TreeView</li>
+          <li>Creating a webview</li>
+          <li>Adding language support features</li>
+          <li>Working with workspace files</li>
+          <li>Adding diagnostic information</li>
+      </ul>
+
+      <h2>Troubleshooting Tips</h2>
+      <p>Here are some common issues you might encounter and how to fix them:</p>
+      <ul>
+          <li>If your extension isn't showing up, make sure the activation events are correctly set</li>
+          <li>Check the Developer Console (Help > Toggle Developer Tools) for error messages</li>
+          <li>Use <code>console.log()</code> to debug (output appears in the Debug Console)</li>
+          <li>If you update <code>package.json</code>, you often need to reload the extension (press F5 again)</li>
+      </ul>
+
+      <div class="tip">
+          <p><strong>Pro Tip:</strong> When developing VS Code extensions, it's helpful to have the VS Code Extension API documentation open for reference. You can find it at: <a href="https://code.visualstudio.com/api">https://code.visualstudio.com/api</a></p>
+      </div>
+
+      <p>That's it! You've created your first VS Code extension.</p>
+
+      <h2 id="faq">Link to Blog</h2>
+      <ul>
+        <li><a href="https://dev.to/sanatan_dive/creating-your-first-vs-code-extension-57cb">Dev.to</a></li>
+      </ul>
+    </main>
+  </div>
+  
+  <footer>
+    <script>
+    (function() {
+      function center_el(tagName) {
+        var tags = document.getElementsByTagName(tagName), i, tag;
+        for (i = 0; i < tags.length; i++) {
+          tag = tags[i];
+          var parent = tag.parentElement;
+          
+          if (parent.childNodes.length === 1) {
+            
+            if (parent.nodeName === 'A') {
+              parent = parent.parentElement;
+              if (parent.childNodes.length != 1) continue;
+            }
+            if (parent.nodeName === 'P') parent.style.textAlign = 'center';
+          }
+        }
+      }
+      var tagNames = ['img', 'embed', 'object'];
+      for (var i = 0; i < tagNames.length; i++) {
+        center_el(tagNames[i]);
+      }
+    })();
+    </script>
+    
+    <hr>
+  </footer>
+</body>
+</html>
